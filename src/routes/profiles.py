@@ -39,15 +39,15 @@ async def create_user_profile(
             detail=str(e)
         )
 
-    if user_token != user_id:
-        usergroup_model = await db.execute(
+    if user_id != user_token:
+        stmt = await db.execute(
             select(UserGroupModel)
             .join(UserModel)
             .where(UserModel.id == user_token)
         )
-        user_group = usergroup_model.scalars().first()
+        user_group = stmt.scalars().first()
 
-        if not user_group or user_group == UserGroupEnum.USER:
+        if not user_group or user_group.name == UserGroupEnum.USER:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="You don't have permission to edit this profile."
