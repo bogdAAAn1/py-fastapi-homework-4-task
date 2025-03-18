@@ -102,7 +102,7 @@ class ProfileCreateSchema(BaseModel):
                     "type": "value_error",
                     "loc": ["date_of_birth"],
                     "msg": str(e),
-                    "input": date_of_birth
+                    "input": str(date_of_birth)
                 }]
             )
 
