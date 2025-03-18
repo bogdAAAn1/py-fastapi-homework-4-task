@@ -40,7 +40,7 @@ class ProfileCreateSchema(BaseModel):
 
     @field_validator("first_name", "last_name")
     @classmethod
-    def validate_first_name(cls, v):
+    def validate_first_name(cls, v: str) -> str:
         try:
             validate_name(v)
             return v.lower()
@@ -57,7 +57,7 @@ class ProfileCreateSchema(BaseModel):
 
     @field_validator("avatar")
     @classmethod
-    def validate_profile_image(cls, v):
+    def validate_profile_image(cls, v: UploadFile) -> UploadFile:
         try:
             validate_image(v)
             return v
@@ -74,7 +74,7 @@ class ProfileCreateSchema(BaseModel):
 
     @field_validator("gender")
     @classmethod
-    def validate_profile_gender(cls, v):
+    def validate_profile_gender(cls, v: str) -> str:
         try:
             validate_gender(v)
             return v
@@ -91,10 +91,10 @@ class ProfileCreateSchema(BaseModel):
 
     @field_validator("date_of_birth")
     @classmethod
-    def validate_profile_birth(cls, v):
+    def validate_profile_birth(cls, date_of_birth: date) -> date:
         try:
-            validate_birth_date(v)
-            return v
+            validate_birth_date(date_of_birth)
+            return date_of_birth
         except ValueError as e:
             raise HTTPException(
                 status_code=422,
@@ -102,13 +102,13 @@ class ProfileCreateSchema(BaseModel):
                     "type": "value_error",
                     "loc": ["date_of_birth"],
                     "msg": str(e),
-                    "input": v
+                    "input": date_of_birth
                 }]
             )
 
     @field_validator("info")
     @classmethod
-    def validate_profile_info(cls, v):
+    def validate_profile_info(cls, v: str) -> str:
         info = v.strip()
         if not info:
             raise HTTPException(

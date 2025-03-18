@@ -40,12 +40,12 @@ async def create_user_profile(
         )
 
     if user_token != user_id:
-        user = await db.execute(
+        usergroup_model = await db.execute(
             select(UserGroupModel)
             .join(UserModel)
             .where(UserModel.id == user_token)
         )
-        user_group = user.scalars().first()
+        user_group = usergroup_model.scalars().first()
 
         if not user_group or user_group == UserGroupEnum.USER:
             raise HTTPException(
